@@ -20,7 +20,7 @@ function export-files {
 	$row_count = $TotalFiles # Max Files = 999
 
 	cd $dest
-    ii $dest
+    #ii $dest
 
     #Where-Object DateModified -le $d | ` 	sort LastWriteTime -Descending | ` 
 	$cmd = 'gci -Filter $ftype -File -Recurse -Path $src | Where-Object { $_.LastWriteTime -gt (Get-Date $DateAfter) `
@@ -48,10 +48,19 @@ function export-files {
 	"`nEnd Time:" 
     Get-Date
 
-
 }
 
-# Execute Section
- export-files -Source "C:\Users" `
- -Destination "C:\Users\2" -FileType "*.*" -TotalFiles 999
 
+# Execute Section
+for($m = 1; $m -lt 13; $m++){  
+
+$a = (get-date ("2018"+"-"+ $m +"-"+"01")).ToShortDateString()
+$a
+$b=(get-date $a).AddMonths(1).ToShortDateString()
+$b
+
+ export-files -Source "C:\Users" `
+ -Destination "Dup\2" -FileType "*.*" -TotalFiles 999 `
+ -DateAfter $a -DateBefore $b
+
+ }
