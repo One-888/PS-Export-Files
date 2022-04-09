@@ -1,6 +1,7 @@
 
 function export-files { 
-    param([string] $Source, [string] $Destination, [string] $FileType, [int32] $TotalFiles)
+    param([string] $Source, [string] $Destination, [string] $FileType, [int32] $TotalFiles,`
+    [string] $DateAfter, [string] $DateBefore)
     
     $src = $Source # "C:\SourceFolder"
 	$dest_in = $Destination # "C:\DestinationFolder"
@@ -22,8 +23,8 @@ function export-files {
     ii $dest
 
     #Where-Object DateModified -le $d | ` 	sort LastWriteTime -Descending | ` 
-	$cmd = 'gci -Filter $ftype -File -Recurse -Path $src | Where-Object { $_.LastWriteTime -gt (Get-Date "2012-10-04") `
-    -and $_.LastWriteTime -lt (Get-Date "2019-10-04") -and $_.Length -gt 1kb} `
+	$cmd = 'gci -Filter $ftype -File -Recurse -Path $src | Where-Object { $_.LastWriteTime -gt (Get-Date $DateAfter) `
+    -and $_.LastWriteTime -lt (Get-Date $DateBefore) -and $_.Length -gt 1kb} `
     | sort -property $_.LastWriteTime | select -First ' + $row_count 
 
 	Write-Progress -Activity "Calulating" -PercentComplete 3
