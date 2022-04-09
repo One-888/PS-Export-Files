@@ -1,3 +1,4 @@
+
 function export-files { 
     param([string] $Source, [string] $Destination, [string] $FileType, [int32] $TotalFiles)
     
@@ -37,7 +38,7 @@ function export-files {
 		Write-Progress -Activity "Copying" -PercentComplete $pct; `
         $number = ([string]$i).PadLeft(4,'0'); `
 		cp -Verbose -Force -Destination ($dest + "\"+ $number + $_.Extension) -Path ($_.FullName ); `
-		return ("`n"+ $h.ToString().Substring(0,8) + ": " + $_.Name); } 
+		return ("`n"+ $number.ToString() + ": " + $_.Name); } 
 
 	#"`nCopy File:" + ($copy_text)
 	"`nTotal Copy Files (with Duplicate):" + ($copy_text).Count
@@ -46,4 +47,10 @@ function export-files {
 	"`nEnd Time:" 
     Get-Date
 
+
 }
+
+# Execute Section
+ export-files -Source "C:\Users" `
+ -Destination "C:\Users\2" -FileType "*.*" -TotalFiles 999
+
