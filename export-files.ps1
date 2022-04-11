@@ -27,7 +27,7 @@ function export-files {
     -and $_.LastWriteTime -lt (Get-Date $DateBefore) -and $_.Length -gt 1kb} `
     | sort -property $_.LastWriteTime | select -First ' + $row_count 
 
-	Write-Progress -Activity "Calulating" -PercentComplete 3
+	Write-Progress -Activity "Calulating" -PercentComplete 1
 	$stat = Invoke-Expression $cmd | measure-object -Property length -Sum
 	"Size (with Duplicate) MB: " + [math]::Round($stat.Sum / 1mb)
     
@@ -50,17 +50,26 @@ function export-files {
 
 }
 
+function export-yearly {param([string] $yr)
 
-# Execute Section
 for($m = 1; $m -lt 13; $m++){  
 
-$a = (get-date ("2018"+"-"+ $m +"-"+"01")).ToShortDateString()
+$a = (get-date ($yr+"-"+ $m +"-"+"01")).ToShortDateString()
 $a
 $b=(get-date $a).AddMonths(1).ToShortDateString()
 $b
 
- export-files -Source "C:\Users" `
- -Destination "Dup\2" -FileType "*.*" -TotalFiles 999 `
+$dst = "F:\FFOutput" + "\"  + $yr
+$pct = ($m / 12) * 100
+Write-Progress -Activity "Yearly" -PercentComplete $pct; 
+
+ export-files -Source "H:\Temp\AVI_ALL"  `
+ -Destination $dst  -FileType "*.*" -TotalFiles 999 `
  -DateAfter $a -DateBefore $b
 
  }
+
+ }
+
+# Execute Section
+("2004" , "2005")  | % {export-yearly $_ }
